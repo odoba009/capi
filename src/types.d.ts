@@ -12,3 +12,18 @@ type Login2 = {
 type otp = {
     cd: string
 }
+
+type Addition = {
+  courseCode: string;
+};
+
+type IdentityT = {
+  examCode: string;
+  candidateNumber: string;
+};
+
+type Additional = {
+  schoolNumber: string;
+  resumptionDate: string;
+  entryCode: string;
+};

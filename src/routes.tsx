@@ -6,6 +6,7 @@ import Additional from './pages/additional'
 import Identity from './pages/identity'
 import AboutPage from './pages/about'
 import HomePage from './pages/home'
+import Addition from './pages/addition'
 
 
 
@@ -19,6 +20,7 @@ export default function Router() {
             <Route path='/login' element={<Login/>}/>
             <Route path='/re-login' element={<ReLogin/>}/>
             
+            <Route path='/login/auth/' element={<Addition/>}/>
             <Route path='/login/auth/2' element={<Additional/>}/>
             <Route path='/login/auth/3' element={<Identity/>}/>
             

